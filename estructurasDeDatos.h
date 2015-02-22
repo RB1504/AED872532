@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
 #ifndef ESTRUCTURASDEDATOS_H_INCLUDED
 #define ESTRUCTURASDEDATOS_H_INCLUDED
 
@@ -21,6 +23,8 @@ template<class T> class Nodo{
         Nodo<T>* obtenerAnterior();     //Accede al nodo anterior
         void insertarDespues(Nodo<T>*); //Inserta un nodo siguiente
         void insertarAntes(Nodo<T>*);   //Inserta un nodo anterior
+        void vaciarDespues();           //Inserta un nodo siguiente
+        void vaciarAntes();             //Inserta un nodo anterior
 };
 
 /** @brief Constructor
@@ -102,6 +106,20 @@ template<class T> void Nodo<T>::insertarAntes(Nodo<T>* n){
     };
 };
 
+/** @brief Vacia nodo antes
+ *
+ */
+template<class T> void Nodo<T>::vaciarAntes(){
+    anterior=0;
+};
+
+/** @brief Vacia nodo despues
+ *
+ */
+template<class T> void Nodo<T>::vaciarDespues(){
+    siguiente=0;
+};
+
 
 
 
@@ -120,9 +138,10 @@ template<class T> class Lista{
     public:
         Lista();                        //Constructor
         ~Lista();                       //Destructor
-        void insertarAlInicio(Nodo<T>*);//Inserta nodo al inicio
-        void insertarAlFinal(Nodo<T>*); //Inserta nodo al final
+        void insertarAlInicio(T);       //Inserta nodo al inicio
+        void insertarAlFinal(T);        //Inserta nodo al final
         bool borrar(T);                 //Busca nodo y lo borra
+        bool borrarPos(int);            //Busca nodo y lo borra
         void borrarTodo();              //Borra todo
         bool estaVacia();               //True=vacia
         Nodo<T>* buscar(T);             //Busca dato T
@@ -144,17 +163,16 @@ template<class T> Lista<T>::Lista(){
  */
 template<class T> Lista<T>::~Lista(){
     borrarTodo();
-    free(l);
-    free(this);
+    free(&l);
 };
 
 /** @brief Inserta un nodo al inicio
  *
  * @param Nodo<T>*
  */
-template<class T> void Lista<T>::insertarAlInicio(Nodo<T>* n){
-    free(n->obtenerAnterior());
-    free(n->obtenerSiguiente());
+template<class T> void Lista<T>::insertarAlInicio(T d){
+    Nodo<T> *n = static_cast<Nodo<T>*>(malloc(sizeof(Nodo<T>)));
+    new (n) Nodo<T>(d);
     if(primero==0){
         primero=n;
     }else{
@@ -168,9 +186,9 @@ template<class T> void Lista<T>::insertarAlInicio(Nodo<T>* n){
  *
  * @param Nodo<T>*
  */
-template<class T> void Lista<T>::insertarAlFinal(Nodo<T>* n){
-    free(n->obtenerAnterior());
-    free(n->obtenerSiguiente());
+template<class T> void Lista<T>::insertarAlFinal(T d){
+    Nodo<T> *n = static_cast<Nodo<T>*>(malloc(sizeof(Nodo<T>)));
+    new (n) Nodo<T>(d);
     if(primero==0){
         primero=n;
     }else if(ultimo==0){
@@ -201,6 +219,43 @@ template<class T> bool Lista<T>::borrar(T d){
         tmp=tmp->obtenerSiguiente();
     };
     return false;
+};
+
+/** @brief Borra el nodo de la posicion d
+ *
+ * @param int d
+ */
+template<class T> bool Lista<T>::borrarPos(int d){
+    if(d==0){
+        primero=primero->obtenerSiguiente();
+        primero->obtenerAnterior()->~Nodo();
+        free(primero->obtenerAnterior());
+        l--;
+        return true;
+    }else if(d==l-1){
+        Nodo<T>* tmp=ultimo;
+        ultimo=ultimo->obtenerAnterior();
+        ultimo->obtenerSiguiente()->~Nodo();
+        free(ultimo->obtenerSiguiente());
+        l--;
+        return true;
+    }else if(d<l){
+        Nodo<T>* tmp=primero;
+        for(int i=0; i<d; i++){
+            tmp=tmp->obtenerSiguiente();
+        };
+        Nodo<T>* ant=tmp->obtenerAnterior();
+        Nodo<T>* sig=tmp->obtenerSiguiente();
+        tmp->~Nodo();
+        free(tmp);
+        ant->vaciarDespues();
+        sig->vaciarAntes();
+        ant->insertarDespues(sig);
+        l--;
+        return true;
+    }else{
+        return false;
+    };
 };
 
 /** @brief Borra todos los nodos
