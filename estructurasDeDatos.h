@@ -31,6 +31,7 @@ template<class T> class Nodo{
 *
 */
 template<class T> Nodo<T>::Nodo(T *v){
+     valor=static_cast<T*>(malloc(sizeof(v)));
     *valor=*v;
     free(v);
 };
@@ -40,7 +41,7 @@ template<class T> Nodo<T>::Nodo(T *v){
 */
 template<class T> Nodo<T>::Nodo(T v){
     valor=static_cast<T*>(malloc(sizeof(v)));
-    *valor=v;
+    new(valor) T(v);
 };
 
 /** @brief Destructor
@@ -134,7 +135,7 @@ template<class T> void Nodo<T>::vaciarDespues(){
 template<class T> class Lista{
     Nodo<T>* primero;               //primer nodo
     Nodo<T>* ultimo;                //ultimo nodo
-    int l;                          //longitud
+    int l = 0;                          //longitud
     public:
         Lista();                        //Constructor
         ~Lista();                       //Destructor
@@ -146,6 +147,7 @@ template<class T> class Lista{
         bool estaVacia();               //True=vacia
         Nodo<T>* buscar(T);             //Busca dato T
         Nodo<T>* posicion(int);         //Busca posicion
+        T datoPosicion(int);           //Busca posicion
         int len();                      //Devuelve longtiud
         Lista<T>operator=(Lista<T>);    //Operador de asignacion
         void imprimir();                //Imprime en consola
@@ -174,7 +176,8 @@ template<class T> void Lista<T>::insertarAlInicio(T d){
     Nodo<T> *n = static_cast<Nodo<T>*>(malloc(sizeof(Nodo<T>)));
     new (n) Nodo<T>(d);
     if(primero==0){
-        primero=n;
+        primero = n;
+        ultimo = n;
     }else{
         n->insertarDespues(primero);
         primero=n;
@@ -191,8 +194,6 @@ template<class T> void Lista<T>::insertarAlFinal(T d){
     new (n) Nodo<T>(d);
     if(primero==0){
         primero=n;
-    }else if(ultimo==0){
-        n->insertarAntes(primero);
         ultimo=n;
     }else{
         n->insertarAntes(ultimo);
@@ -227,6 +228,7 @@ template<class T> bool Lista<T>::borrar(T d){
  */
 template<class T> bool Lista<T>::borrarPos(int d){
     if(d==0){
+
         primero=primero->obtenerSiguiente();
         primero->obtenerAnterior()->~Nodo();
         free(primero->obtenerAnterior());
@@ -316,6 +318,31 @@ template<class T> Nodo<T>* Lista<T>::posicion(int n){
         };
     }else{
         return 0;
+    };
+};
+
+/** Devuelve el dato en la posicion que se indique
+ *
+ * @param int n, posicion
+ * @return T*
+ */
+template<class T> T Lista<T>::datoPosicion(int n){
+    if(n<l){
+        if(n<l/2){
+            Nodo<T>* tmp=primero;
+            for(int i=0; i<n; i++){
+                tmp=tmp->obtenerSiguiente();
+            };
+            return *(tmp->obtenerDato());
+        }else{
+            Nodo<T>* tmp=ultimo;
+            for(int i=l-1; i>n; i--){
+                tmp=tmp->obtenerAnterior();
+            };
+            return *(tmp->obtenerDato());
+        };
+    }else{
+       // return 0;
     };
 };
 
