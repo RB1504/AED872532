@@ -1,9 +1,9 @@
+
+#ifndef ESTRUCTURASDEDATOS_H_INCLUDED
+#define ESTRUCTURASDEDATOS_H_INCLUDED
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef ESTRUCTURASDEDATOS_H_INCLUDED
-#define ESTRUCTURASDEDATOS_H_INCLUDED
-
 template<class T> class Lista;
 
 /** @brief Declaracion de la clase nodo
@@ -27,99 +27,7 @@ template<class T> class Nodo{
         void vaciarAntes();             //Inserta un nodo anterior
 };
 
-/** @brief Constructor
-*
-*/
-template<class T> Nodo<T>::Nodo(T *v){
-     valor=static_cast<T*>(malloc(sizeof(v)));
-    *valor=*v;
-    free(v);
-};
 
-/** @brief Constructor
-*
-*/
-template<class T> Nodo<T>::Nodo(T v){
-    valor=static_cast<T*>(malloc(sizeof(v)));
-    new(valor) T(v);
-};
-
-/** @brief Destructor
-*
-*/
-template<class T> Nodo<T>::~Nodo(){
-    siguiente=0;
-    anterior=0;
-    free(valor);
-};
-
-/** @brief Devuelve el siguiente nodo
- *
- * @return Nodo<T>
- */
-template<class T> Nodo<T>* Nodo<T>::obtenerSiguiente(){
-    return siguiente;
-};
-
-/** @brief Devuelve el nodo anterior
- *
- * @return Nodo<T>
- */
-template<class T> Nodo<T>* Nodo<T>::obtenerAnterior(){
-    return anterior;
-};
-
-/** @brief Devuelve el dato contenido
- *
- * @return T
- */
-template<class T> T* Nodo<T>::obtenerDato(){
-    return valor;
-};
-
-/** @brief Inserta un nodo despues
- *
- * @param Nodo<T>*
- */
-template<class T> void Nodo<T>::insertarDespues(Nodo<T>* n){
-    if(siguiente!=0){
-        siguiente->insertarAntes(n);
-    };
-
-    siguiente=n;
-
-    if(n->obtenerAnterior()!=this){
-        n->insertarAntes(this);
-    };
-};
-
-/** @brief Inserta un nodo antes
- *
- * @param Nodo<T>*
- */
-template<class T> void Nodo<T>::insertarAntes(Nodo<T>* n){
-    if(anterior!=0){
-        anterior->insertarDespues(n);
-    };
-    anterior=n;
-    if(n->obtenerSiguiente()!=this){
-        n->insertarDespues(this);
-    };
-};
-
-/** @brief Vacia nodo antes
- *
- */
-template<class T> void Nodo<T>::vaciarAntes(){
-    anterior=0;
-};
-
-/** @brief Vacia nodo despues
- *
- */
-template<class T> void Nodo<T>::vaciarDespues(){
-    siguiente=0;
-};
 
 
 
@@ -153,25 +61,127 @@ template<class T> class Lista{
         void imprimir();                //Imprime en consola
 };
 
+
+/** @brief Constructor
+*
+*/
+template<class T> Nodo<T>::Nodo(T *v){
+    valor=static_cast<T*>(malloc(sizeof(v)));
+    *valor=*v;
+    free(v);
+};
+
+/** @brief Constructor
+*
+*/
+template<class T> Nodo<T>::Nodo(T v){
+    valor=static_cast<T*>(malloc(sizeof(v)));
+    new(valor) T(v);
+};
+
+/** @brief Destructor
+*
+*/
+template<class T> Nodo<T>::~Nodo(){
+    siguiente=0;
+    anterior=0;
+    free(valor);
+};
+
+/** @brief Devuelve el siguiente nodo
+*
+* @return Nodo<T>
+*/
+template<class T> Nodo<T>* Nodo<T>::obtenerSiguiente(){
+    return siguiente;
+};
+
+/** @brief Devuelve el nodo anterior
+*
+* @return Nodo<T>
+*/
+template<class T> Nodo<T>* Nodo<T>::obtenerAnterior(){
+    return anterior;
+};
+
+/** @brief Devuelve el dato contenido
+*
+* @return T
+*/
+template<class T> T* Nodo<T>::obtenerDato(){
+    return valor;
+};
+
+/** @brief Inserta un nodo despues
+*
+* @param Nodo<T>*
+*/
+template<class T> void Nodo<T>::insertarDespues(Nodo<T>* n){
+    if(siguiente!=0){
+        siguiente->insertarAntes(n);
+    };
+
+    siguiente=n;
+
+    if(n->obtenerAnterior()!=this){
+        n->insertarAntes(this);
+    };
+};
+
+/** @brief Inserta un nodo antes
+*
+* @param Nodo<T>*
+*/
+template<class T> void Nodo<T>::insertarAntes(Nodo<T>* n){
+    if(anterior!=0){
+        anterior->insertarDespues(n);
+    };
+    anterior=n;
+    if(n->obtenerSiguiente()!=this){
+        n->insertarDespues(this);
+    };
+};
+
+/** @brief Vacia nodo antes
+*
+*/
+template<class T> void Nodo<T>::vaciarAntes(){
+    anterior=0;
+};
+
+/** @brief Vacia nodo despues
+*
+*/
+template<class T> void Nodo<T>::vaciarDespues(){
+    siguiente=0;
+};
+
+
+
+
+
+
+
+
 /** @brief Construye la lista
- *
- */
+*
+*/
 template<class T> Lista<T>::Lista(){
     primero=ultimo=0;
 };
 
 /** @brief Destruye la lista
- *
- */
+*
+*/
 template<class T> Lista<T>::~Lista(){
     borrarTodo();
     free(&l);
 };
 
 /** @brief Inserta un nodo al inicio
- *
- * @param Nodo<T>*
- */
+*
+* @param Nodo<T>*
+*/
 template<class T> void Lista<T>::insertarAlInicio(T d){
     Nodo<T> *n = static_cast<Nodo<T>*>(malloc(sizeof(Nodo<T>)));
     new (n) Nodo<T>(d);
@@ -186,9 +196,9 @@ template<class T> void Lista<T>::insertarAlInicio(T d){
 };
 
 /** @brief Inserta un nodo al final
- *
- * @param Nodo<T>*
- */
+*
+* @param Nodo<T>*
+*/
 template<class T> void Lista<T>::insertarAlFinal(T d){
     Nodo<T> *n = static_cast<Nodo<T>*>(malloc(sizeof(Nodo<T>)));
     new (n) Nodo<T>(d);
@@ -203,9 +213,9 @@ template<class T> void Lista<T>::insertarAlFinal(T d){
 };
 
 /** @brief Borra el nodo que contiene el dato d
- *
- * @param T d
- */
+*
+* @param T d
+*/
 template<class T> bool Lista<T>::borrar(T d){
     Nodo<T>* tmp=primero;
     for(int i=0; i<l; i++){
@@ -223,9 +233,9 @@ template<class T> bool Lista<T>::borrar(T d){
 };
 
 /** @brief Borra el nodo de la posicion d
- *
- * @param int d
- */
+*
+* @param int d
+*/
 template<class T> bool Lista<T>::borrarPos(int d){
     if(d==0){
 
@@ -261,8 +271,8 @@ template<class T> bool Lista<T>::borrarPos(int d){
 };
 
 /** @brief Borra todos los nodos
- *
- */
+*
+*/
 template<class T> void Lista<T>::borrarTodo(){
     for(int i=0; i<l; i++){
         Nodo<T> *tmp=primero;
@@ -273,18 +283,18 @@ template<class T> void Lista<T>::borrarTodo(){
 };
 
 /** Revisa si la lista esta o no vacia
- *
- * @return bool
- */
+*
+* @return bool
+*/
 template<class T> bool Lista<T>::estaVacia(){
     return (len()==0);
 };
 
 /** Busca un dato y devuelve el nodo que lo contiene
- *
- * @param T d, dato
- * @return Nodo<T>*
- */
+*
+* @param T d, dato
+* @return Nodo<T>*
+*/
 template<class T> Nodo<T>* Lista<T>::buscar(T d){
     Nodo<T>* tmp=primero;
     for(int i=0; i<l; i++){
@@ -297,10 +307,10 @@ template<class T> Nodo<T>* Lista<T>::buscar(T d){
 };
 
 /** Devuelve el nodo en la posicion que se indique
- *
- * @param int n, posicion
- * @return Nodo<T>*
- */
+*
+* @param int n, posicion
+* @return Nodo<T>*
+*/
 template<class T> Nodo<T>* Lista<T>::posicion(int n){
     if(n<l){
         if(n<l/2){
@@ -322,10 +332,10 @@ template<class T> Nodo<T>* Lista<T>::posicion(int n){
 };
 
 /** Devuelve el dato en la posicion que se indique
- *
- * @param int n, posicion
- * @return T*
- */
+*
+* @param int n, posicion
+* @return T*
+*/
 template<class T> T Lista<T>::datoPosicion(int n){
     if(n<l){
         if(n<l/2){
@@ -342,21 +352,21 @@ template<class T> T Lista<T>::datoPosicion(int n){
             return *(tmp->obtenerDato());
         };
     }else{
-       // return 0;
+        // return 0;
     };
 };
 
 /** Devuelve la longitud
- *
- * @return int;
- */
+*
+* @return int;
+*/
 template<class T> int Lista<T>::len(){
     return l;
 };
 
 /** @brief Imprime la lista
- *
- */
+*
+*/
 template<class T> void Lista<T>::imprimir(){
     if(len()>0){
         Nodo<T>* tmp=primero;
@@ -368,5 +378,6 @@ template<class T> void Lista<T>::imprimir(){
         std::cout<<"La lista esta vacia"<<std::endl;
     };
 };
+
 
 #endif // ESTRUCTURASDEDATOS_H_INCLUDED

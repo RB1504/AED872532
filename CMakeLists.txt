@@ -3,25 +3,30 @@ project(Crazy_River_Rider)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
-    main.cpp
-    constants.h
-    estructurasDeDatos.h
-    eventos.pb.cc
-    eventos.pb.h
-    gui.cpp
-    gui.h
-    objects.cpp
-    objects.h
-    player.png
-    protohandler.cpp
-    protohandler.h
-    terrain.cpp
-    terrain.h
+set(SOURCE_FILES src/main.cpp
+                 src/estructurasDeDatos.cpp
+                 src/gui.cpp
+                 src/objects.cpp
+                 src/observer.cpp
+                 src/protohandler.cpp
+                 src/terrain.cpp
+                 src/eventos.pb.cc)
+set(HEADERS_FILES headers/eventos.pb.h
+                    headers/clasesLogicas.h
+                    headers/estructurasDeDatos.h
+                    headers/gui.h
+                    headers/objects.h
+                    headers/observer.h
+                    headers/protohandler.h
+                    headers/terrain.h
+                    headers/constants.h
+                    headers/servidorDeControl.h
 
-    )
+                    )
 
-add_executable(Crazy_River_Rider ${SOURCE_FILES})
+
+include_directories(src res headers)
+add_executable(Crazy_River_Rider ${SOURCE_FILES} ${HEADERS_FILES})
 
 set(LIBS
     liballegro.so
