@@ -5,7 +5,7 @@
  * Clase Enemigo
  * Tiene argumentos y funciones necesarias para el objeto de Enemigo
  *
- * Existen 3 tipos de enemigos para definir:
+ * Existen 3 tipos de enemigos para defnir:
  * 						1 = Nave enemiga basica.
  * 						2 = Nave movil.
  * 						3 = Kamikaze
